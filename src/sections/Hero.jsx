@@ -1,45 +1,74 @@
 import { motion } from 'framer-motion'
 import { useParallax } from 'react-scroll-parallax'
-import { FaGithub, FaLinkedinIn, FaEnvelope, FaArrowDown } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import { FaGithub, FaLinkedinIn, FaEnvelope, FaArrowDown, FaCode } from 'react-icons/fa'
+import { SiLeetcode } from 'react-icons/si'
 
-const socials = [
-  { icon: FaGithub, href: 'https://github.com/nikhitadasari26', label: 'GitHub' },
-  { icon: FaLinkedinIn, href: 'https://www.linkedin.com/in/nikhita-dasari-310703291/', label: 'LinkedIn' },
-  { icon: FaEnvelope, href: 'mailto:nikhitadasari1@gmail.com', label: 'Email' },
+// Typewriter hook
+function useTypewriter(words, speed = 80, pause = 1800) {
+  const [text, setText] = useState('')
+  const [wordIdx, setWordIdx] = useState(0)
+  const [charIdx, setCharIdx] = useState(0)
+  const [deleting, setDeleting] = useState(false)
+
+  useEffect(() => {
+    const current = words[wordIdx]
+    const timeout = setTimeout(() => {
+      if (!deleting) {
+        setText(current.slice(0, charIdx + 1))
+        if (charIdx + 1 === current.length) {
+          setTimeout(() => setDeleting(true), pause)
+        } else {
+          setCharIdx((c) => c + 1)
+        }
+      } else {
+        setText(current.slice(0, charIdx - 1))
+        if (charIdx - 1 === 0) {
+          setDeleting(false)
+          setWordIdx((w) => (w + 1) % words.length)
+          setCharIdx(0)
+        } else {
+          setCharIdx((c) => c - 1)
+        }
+      }
+    }, deleting ? speed / 2 : speed)
+    return () => clearTimeout(timeout)
+  }, [charIdx, deleting, wordIdx, words, speed, pause])
+
+  return text
+}
+
+const ROLES = [
+  'Software Development Engineer',
+  'Flutter App Developer',
+  'Firebase Expert',
+  'Problem Solver',
 ]
 
-// Floating blob component
-function Blob({ style, parallaxSpeed }) {
-  const { ref } = useParallax({ speed: parallaxSpeed })
-  return (
-    <div
-      ref={ref}
-      style={{
-        position: 'absolute',
-        borderRadius: '50%',
-        filter: 'blur(80px)',
-        pointerEvents: 'none',
-        ...style,
-      }}
-    />
-  )
+const SOCIALS = [
+  { icon: FaGithub, href: 'https://github.com/nikhitadasari26', label: 'GitHub', color: '#fff' },
+  { icon: FaLinkedinIn, href: 'https://www.linkedin.com/in/nikhita-dasari-310703291/', label: 'LinkedIn', color: '#0ea5e9' },
+  { icon: FaEnvelope, href: 'mailto:nikhitadasari1@gmail.com', label: 'Email', color: '#a78bfa' },
+  { icon: SiLeetcode, href: 'https://leetcode.com/u/Nikhita_dasari/', label: 'LeetCode', color: '#FFA116' },
+]
+
+// Parallax blob
+function Blob({ speed, style }) {
+  const { ref } = useParallax({ speed })
+  return <div ref={ref} className="orb" style={style} />
 }
 
 export default function Hero() {
-  const { ref: taglineRef } = useParallax({ speed: -5 })
-
-  const scrollToAbout = () => {
-    document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const role = useTypewriter(ROLES)
 
   return (
     <section
       id="hero"
+      className="grid-bg"
       style={{
         position: 'relative',
         minHeight: '100vh',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
@@ -47,145 +76,154 @@ export default function Hero() {
         paddingTop: '80px',
       }}
     >
-      {/* Parallax background blobs — PARALLAX EFFECT #1 */}
-      <Blob
-        parallaxSpeed={-15}
-        style={{
-          width: '600px',
-          height: '600px',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%)',
-          top: '-100px',
-          left: '-150px',
-        }}
-      />
-      <Blob
-        parallaxSpeed={10}
-        style={{
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(236,72,153,0.25) 0%, transparent 70%)',
-          bottom: '-50px',
-          right: '-100px',
-        }}
-      />
-      <Blob
-        parallaxSpeed={-8}
-        style={{
-          width: '350px',
-          height: '350px',
-          background: 'radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 70%)',
-          top: '40%',
-          left: '60%',
-        }}
-      />
+      {/* Parallax orbs — PARALLAX EFFECT */}
+      <Blob speed={-18} style={{
+        width: '700px', height: '700px',
+        background: 'radial-gradient(circle, rgba(139,92,246,0.22) 0%, transparent 65%)',
+        top: '-200px', left: '-200px',
+      }} />
+      <Blob speed={12} style={{
+        width: '600px', height: '600px',
+        background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, transparent 65%)',
+        bottom: '-150px', right: '-150px',
+      }} />
+      <Blob speed={-8} style={{
+        width: '400px', height: '400px',
+        background: 'radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 65%)',
+        top: '35%', left: '55%',
+      }} />
 
-      {/* Grid overlay */}
+      {/* Noise vignette */}
       <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: 'linear-gradient(rgba(139,92,246,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.04) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
+        position: 'absolute', inset: 0,
+        background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(3,3,9,0.8) 100%)',
         pointerEvents: 'none',
       }} />
 
-      {/* Main content */}
+      {/* Content */}
       <div style={{
-        position: 'relative',
-        zIndex: 1,
+        position: 'relative', zIndex: 1,
         textAlign: 'center',
-        maxWidth: '800px',
+        maxWidth: '860px',
+        width: '100%',
       }}>
-        {/* Badge */}
+        {/* Status badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.4rem 1rem',
             borderRadius: '2rem',
-            background: 'rgba(139,92,246,0.1)',
-            border: '1px solid rgba(139,92,246,0.3)',
-            fontSize: '0.85rem',
-            color: '#a78bfa',
+            background: 'rgba(16,185,129,0.08)',
+            border: '1px solid rgba(16,185,129,0.25)',
+            fontSize: '0.8rem',
+            color: '#34d399',
             fontWeight: 500,
-            marginBottom: '1.5rem',
+            marginBottom: '2rem',
           }}
         >
           <span style={{
-            width: '8px', height: '8px', borderRadius: '50%',
-            background: '#22c55e',
-            boxShadow: '0 0 8px #22c55e',
-            display: 'inline-block',
-            animation: 'pulse 2s infinite',
+            width: '7px', height: '7px', borderRadius: '50%',
+            background: '#10b981',
+            boxShadow: '0 0 8px rgba(16,185,129,0.8)',
+            animation: 'ping 1.5s ease-in-out infinite',
           }} />
-          Available for opportunities
+          Open to opportunities
+        </motion.div>
+
+        {/* Code tag */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.25 }}
+          style={{
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: 'clamp(0.7rem, 1.5vw, 0.85rem)',
+            color: 'rgba(139,92,246,0.5)',
+            marginBottom: '1rem',
+            letterSpacing: '0.05em',
+          }}
+        >
+          &lt;h1&gt;
         </motion.div>
 
         {/* Name */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.35 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           style={{
             fontFamily: 'Outfit, sans-serif',
             fontWeight: 900,
-            fontSize: 'clamp(2.5rem, 7vw, 5rem)',
-            lineHeight: 1.1,
+            fontSize: 'clamp(3rem, 9vw, 6.5rem)',
+            lineHeight: 1.0,
+            letterSpacing: '-0.03em',
             marginBottom: '0.5rem',
           }}
         >
-          Hi, I'm{' '}
+          <span style={{ color: 'var(--text-primary)' }}>Nikhita</span>
+          <br />
           <span style={{
-            background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #06b6d4 100%)',
+            background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 55%, #06b6d4 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
           }}>
-            Nikhita
+            Dasari
           </span>
         </motion.h1>
 
-        {/* Full name */}
-        <motion.p
+        {/* End tag */}
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ delay: 0.45 }}
           style={{
-            fontSize: 'clamp(0.85rem, 2vw, 1rem)',
-            color: 'var(--text-secondary)',
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            marginBottom: '1rem',
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: 'clamp(0.7rem, 1.5vw, 0.85rem)',
+            color: 'rgba(139,92,246,0.5)',
+            marginBottom: '1.5rem',
+            letterSpacing: '0.05em',
           }}
         >
-          Sai Manasa Nikhita Dasari
-        </motion.p>
+          &lt;/h1&gt;
+        </motion.div>
 
-        {/* Role */}
+        {/* Typewriter role */}
         <motion.div
-          ref={taglineRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.55 }}
+          transition={{ delay: 0.55 }}
           style={{
-            fontSize: 'clamp(1.1rem, 3vw, 1.6rem)',
-            fontFamily: 'Outfit, sans-serif',
-            fontWeight: 600,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.75rem',
             marginBottom: '1.5rem',
-            color: '#cbd5e1',
+            minHeight: '2.5rem',
           }}
         >
-          Aspiring{' '}
+          <FaCode style={{ color: '#8b5cf6', fontSize: '1.1rem', flexShrink: 0 }} />
           <span style={{
-            background: 'linear-gradient(90deg, #8b5cf6, #ec4899)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: 'clamp(0.9rem, 2.5vw, 1.2rem)',
+            fontWeight: 500,
+            color: '#a78bfa',
           }}>
-            Software Development Engineer
+            {role}
+            <span style={{
+              display: 'inline-block',
+              width: '2px',
+              height: '1.1em',
+              background: '#8b5cf6',
+              marginLeft: '2px',
+              verticalAlign: 'middle',
+              animation: 'blink 1s step-end infinite',
+            }} />
           </span>
         </motion.div>
 
@@ -193,24 +231,24 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.7 }}
+          transition={{ delay: 0.65 }}
           style={{
+            fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
             color: 'var(--text-secondary)',
-            fontSize: 'clamp(0.9rem, 2vw, 1.05rem)',
             lineHeight: 1.8,
-            maxWidth: '60ch',
+            maxWidth: '56ch',
             margin: '0 auto 2.5rem',
           }}
         >
-          Building scalable apps with Flutter & Firebase. Strong in DSA, OOP & clean code principles.
-          Currently pursuing B.Tech CSE with CGPA 8.88.
+          Aspiring SDE building scalable apps with <strong style={{ color: '#a78bfa' }}>Flutter & Firebase</strong>.
+          Strong in DSA · OOP · Clean Code · B.Tech CSE @ CGPA <strong style={{ color: '#a78bfa' }}>8.88</strong>
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTA buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.85 }}
+          transition={{ delay: 0.75 }}
           style={{
             display: 'flex',
             gap: '1rem',
@@ -219,97 +257,95 @@ export default function Hero() {
             marginBottom: '3rem',
           }}
         >
-          <motion.a
-            href="#projects"
+          <motion.button
             id="view-work-btn"
-            onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }) }}
-            whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(139,92,246,0.6)' }}
+            onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
+            whileHover={{ scale: 1.04, boxShadow: '0 0 35px rgba(139,92,246,0.55)' }}
             whileTap={{ scale: 0.97 }}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.85rem 2rem',
-              borderRadius: '0.75rem',
+              padding: '0.9rem 2.25rem',
+              borderRadius: '10px',
               background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
               color: '#fff',
-              textDecoration: 'none',
-              fontWeight: 600,
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 700,
               fontSize: '1rem',
               fontFamily: 'Outfit, sans-serif',
               letterSpacing: '0.02em',
             }}
           >
-            View My Work
-          </motion.a>
+            View My Work ↓
+          </motion.button>
 
           <motion.a
             href="mailto:nikhitadasari1@gmail.com"
-            id="contact-me-btn"
-            whileHover={{ scale: 1.05 }}
+            id="contact-hero-btn"
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.85rem 2rem',
-              borderRadius: '0.75rem',
+              padding: '0.9rem 2.25rem',
+              borderRadius: '10px',
               background: 'transparent',
-              color: '#fff',
+              color: 'var(--text-primary)',
+              border: '1px solid rgba(255,255,255,0.12)',
               textDecoration: 'none',
               fontWeight: 600,
               fontSize: '1rem',
               fontFamily: 'Outfit, sans-serif',
-              border: '1px solid rgba(255,255,255,0.15)',
-              letterSpacing: '0.02em',
+              transition: 'border-color 0.2s',
+              display: 'inline-flex',
+              alignItems: 'center',
             }}
+            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'rgba(139,92,246,0.4)'}
+            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'}
           >
-            Contact Me
+            Get in Touch
           </motion.a>
         </motion.div>
 
-        {/* Social Icons */}
+        {/* Social links */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: 0.9 }}
           style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '1rem',
-            marginBottom: '3rem',
+            gap: '0.75rem',
+            marginBottom: '4rem',
           }}
         >
-          {socials.map(({ icon: Icon, href, label }) => (
+          {SOCIALS.map(({ icon: Icon, href, label, color }) => (
             <motion.a
               key={label}
               href={href}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              whileHover={{ scale: 1.2, y: -3 }}
+              whileHover={{ scale: 1.18, y: -3 }}
               whileTap={{ scale: 0.9 }}
+              title={label}
               style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '0.6rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                width: '44px', height: '44px',
+                borderRadius: '10px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
                 color: 'var(--text-secondary)',
                 textDecoration: 'none',
-                fontSize: '1.1rem',
-                transition: 'color 0.2s, border-color 0.2s',
+                fontSize: '1.05rem',
+                transition: 'all 0.2s',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#8b5cf6'
-                e.currentTarget.style.borderColor = 'rgba(139,92,246,0.5)'
+                e.currentTarget.style.color = color
+                e.currentTarget.style.borderColor = `${color}50`
+                e.currentTarget.style.background = `${color}10`
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = 'var(--text-secondary)'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
+                e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
               }}
             >
               <Icon />
@@ -319,33 +355,36 @@ export default function Hero() {
 
         {/* Scroll indicator */}
         <motion.button
-          id="scroll-down-btn"
-          onClick={scrollToAbout}
+          onClick={() => document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 8, 0] }}
-          transition={{ delay: 1.2, y: { duration: 1.5, repeat: Infinity } }}
+          transition={{
+            opacity: { delay: 1.1 },
+            y: { duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }
+          }}
           style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'var(--text-secondary)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '0.5rem',
-            fontSize: '0.8rem',
-            letterSpacing: '0.1em',
+            background: 'none', border: 'none', cursor: 'pointer',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', gap: '0.4rem',
+            color: 'var(--text-muted)',
+            fontSize: '0.72rem',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
           }}
         >
-          <span>SCROLL</span>
-          <FaArrowDown style={{ fontSize: '1rem' }} />
+          <span>Scroll</span>
+          <FaArrowDown />
         </motion.button>
       </div>
 
       <style>{`
-        @keyframes pulse {
+        @keyframes ping {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.4); opacity: 0.6; }
+        }
+        @keyframes blink {
           0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
+          50% { opacity: 0; }
         }
       `}</style>
     </section>

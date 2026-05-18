@@ -1,68 +1,83 @@
+/* ============================================================
+   GOOGLE FONTS — must be first @import
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @import "tailwindcss";
 
 /* ============================================================
    DESIGN TOKENS
    ============================================================ */
 :root {
-  --bg-primary: #05050f;
-  --bg-secondary: #0d0d1f;
-  --bg-card: rgba(255, 255, 255, 0.04);
-  --accent-purple: #8b5cf6;
-  --accent-pink: #ec4899;
-  --accent-cyan: #06b6d4;
-  --accent-violet: #7c3aed;
+  --bg-primary: #030309;
+  --bg-secondary: #080818;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-card-hover: rgba(255, 255, 255, 0.06);
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --purple-dark: #7c3aed;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+  --green: #10b981;
+  --amber: #f59e0b;
   --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --gradient-hero: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #06b6d4 100%);
-  --gradient-card: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.08));
+  --text-secondary: #64748b;
+  --text-muted: #475569;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(139, 92, 246, 0.3);
+  --shadow-purple: 0 20px 60px rgba(139, 92, 246, 0.15);
+  --shadow-pink: 0 20px 60px rgba(236, 72, 153, 0.15);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
 }
 
 /* ============================================================
-   BASE STYLES
+   BASE RESET
    ============================================================ */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  font-size: 16px;
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
   color: var(--text-primary);
   overflow-x: hidden;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Outfit', sans-serif;
+  line-height: 1.2;
+}
+
+code, pre, .mono {
+  font-family: 'JetBrains Mono', monospace;
 }
 
 /* ============================================================
    SCROLLBAR
    ============================================================ */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-purple);
-  border-radius: 3px;
+  background: linear-gradient(180deg, var(--purple), var(--pink));
+  border-radius: 4px;
 }
 
 /* ============================================================
    SELECTION
    ============================================================ */
 ::selection {
-  background: rgba(139, 92, 246, 0.4);
+  background: rgba(139, 92, 246, 0.35);
   color: #fff;
 }
 
@@ -70,58 +85,77 @@ h1, h2, h3, h4, h5, h6 {
    UTILITY CLASSES
    ============================================================ */
 .gradient-text {
-  background: var(--gradient-hero);
+  background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 50%, var(--cyan) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.glass-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+.gradient-text-2 {
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.section-heading {
+.glass {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.glass-hover:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--purple-light);
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 0.35rem 0.9rem;
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+}
+
+.section-title {
   font-family: 'Outfit', sans-serif;
   font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.section-subheading {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  max-width: 40ch;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 /* ============================================================
-   GLOW EFFECTS
+   GRID BACKGROUND
    ============================================================ */
-.glow-purple {
-  box-shadow: 0 0 40px rgba(139, 92, 246, 0.25);
-}
-
-.glow-pink {
-  box-shadow: 0 0 40px rgba(236, 72, 153, 0.25);
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(139,92,246,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
 /* ============================================================
-   NOISE TEXTURE OVERLAY
+   GLOW ORBS
    ============================================================ */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
   pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
+  will-change: transform;
 }
 
 /* ============================================================
-   ACCESSIBILITY — REDUCED MOTION (REQUIRED)
+   ACCESSIBILITY — prefers-reduced-motion (REQUIRED)
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -130,4 +164,14 @@ body::before {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ============================================================
+   RESPONSIVE HELPERS
+   ============================================================ */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+}
+@media (min-width: 769px) {
+  .show-mobile { display: none !important; }
 }

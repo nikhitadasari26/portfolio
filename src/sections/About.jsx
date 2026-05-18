@@ -1,76 +1,144 @@
-import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { FaCode, FaMobile, FaDatabase, FaCloud } from 'react-icons/fa'
 
-const highlights = [
-  { icon: FaMobile, label: 'Flutter Dev', color: '#06b6d4' },
-  { icon: FaDatabase, label: 'Firebase', color: '#f59e0b' },
-  { icon: FaCode, label: 'DSA Expert', color: '#8b5cf6' },
-  { icon: FaCloud, label: 'Cloud & AWS', color: '#ec4899' },
+const TIMELINE = [
+  {
+    year: '2023–Present',
+    title: 'B.Tech Computer Science',
+    org: 'Aditya College of Engineering & Technology',
+    detail: 'CGPA: 8.88 · Coursework: DSA, OOP, DBMS, OS, Networks',
+    color: '#8b5cf6',
+    icon: '🎓',
+  },
+  {
+    year: 'May–Jun 2025',
+    title: 'Flutter Full Stack Developer Intern',
+    org: 'Technical Hub Pvt. Ltd.',
+    detail: 'Built 3 multi-screen apps · Integrated 5+ APIs · Real-time booking for 100+ users',
+    color: '#ec4899',
+    icon: '💼',
+  },
+  {
+    year: '2021–2023',
+    title: 'Class 12th',
+    org: 'Andhra Pradesh State Board',
+    detail: 'Percentage: 91.8%',
+    color: '#06b6d4',
+    icon: '📚',
+  },
 ]
 
-const stats = [
-  { value: '300+', label: 'LeetCode Problems' },
-  { value: '8.88', label: 'CGPA' },
-  { value: '3+', label: 'Major Projects' },
-  { value: '5★', label: 'HackerRank SQL' },
+const HIGHLIGHTS = [
+  { label: 'Flutter Dev', color: '#06b6d4', bg: 'rgba(6,182,212,0.08)', border: 'rgba(6,182,212,0.2)' },
+  { label: 'Firebase Expert', color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)' },
+  { label: 'DSA Enthusiast', color: '#8b5cf6', bg: 'rgba(139,92,246,0.08)', border: 'rgba(139,92,246,0.2)' },
+  { label: 'AWS Basics', color: '#f97316', bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.2)' },
+  { label: 'AI Apps', color: '#10b981', bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)' },
+  { label: 'Clean Code', color: '#ec4899', bg: 'rgba(236,72,153,0.08)', border: 'rgba(236,72,153,0.2)' },
 ]
+
+function TimelineItem({ item, index, inView }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -30 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.15 }}
+      style={{ display: 'flex', gap: '1.25rem' }}
+    >
+      {/* Left — icon + line */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+        <div style={{
+          width: '44px', height: '44px',
+          borderRadius: '12px',
+          background: `${item.color}15`,
+          border: `1px solid ${item.color}30`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '1.2rem',
+          flexShrink: 0,
+        }}>
+          {item.icon}
+        </div>
+        {index < TIMELINE.length - 1 && (
+          <div style={{
+            width: '2px', flex: 1,
+            background: `linear-gradient(180deg, ${item.color}30, transparent)`,
+            margin: '0.5rem 0',
+          }} />
+        )}
+      </div>
+
+      {/* Right — content */}
+      <div style={{ paddingBottom: index < TIMELINE.length - 1 ? '1.75rem' : 0 }}>
+        <div style={{
+          fontSize: '0.72rem',
+          fontFamily: 'JetBrains Mono, monospace',
+          color: item.color,
+          fontWeight: 600,
+          marginBottom: '0.25rem',
+          letterSpacing: '0.05em',
+        }}>
+          {item.year}
+        </div>
+        <div style={{
+          fontFamily: 'Outfit, sans-serif',
+          fontWeight: 700,
+          fontSize: '1rem',
+          color: 'var(--text-primary)',
+          marginBottom: '0.2rem',
+        }}>
+          {item.title}
+        </div>
+        <div style={{
+          fontSize: '0.82rem',
+          color: '#a78bfa',
+          fontWeight: 500,
+          marginBottom: '0.35rem',
+        }}>
+          {item.org}
+        </div>
+        <div style={{
+          fontSize: '0.82rem',
+          color: 'var(--text-secondary)',
+          lineHeight: 1.6,
+        }}>
+          {item.detail}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
 
 export default function About() {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-100px' })
+  const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section
-      id="about"
-      ref={ref}
-      style={{
-        padding: 'clamp(4rem, 10vw, 7rem) 1.5rem',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Background accent */}
+    <section id="about" ref={ref} style={{
+      padding: 'clamp(5rem, 10vw, 8rem) 1.5rem',
+      position: 'relative', overflow: 'hidden',
+    }}>
+      {/* Background glow */}
       <div style={{
-        position: 'absolute',
-        top: '50%',
-        right: '-200px',
-        width: '500px',
-        height: '500px',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)',
-        transform: 'translateY(-50%)',
+        position: 'absolute', top: '20%', right: '-300px',
+        width: '700px', height: '700px', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        {/* Section Label */}
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          style={{ marginBottom: '3.5rem', textAlign: 'center' }}
+          style={{ textAlign: 'center', marginBottom: '4.5rem' }}
         >
-          <span style={{
-            fontSize: '0.8rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.2em',
-            color: '#8b5cf6',
-            fontWeight: 600,
-          }}>
-            Get to Know Me
-          </span>
-          <h2 className="section-heading" style={{ marginTop: '0.5rem' }}>
-            About{' '}
-            <span style={{
-              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>
-              Me
-            </span>
+          <div className="section-label">
+            <span>👋</span> About Me
+          </div>
+          <h2 className="section-title">
+            The Story{' '}
+            <span className="gradient-text-2">Behind</span>
           </h2>
         </motion.div>
 
@@ -78,199 +146,194 @@ export default function About() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '3rem',
-          alignItems: 'center',
+          gap: '4rem',
+          alignItems: 'start',
         }}>
-          {/* Avatar column — ON-SCROLL ANIMATION #1 */}
+          {/* Left — Avatar + stats */}
           <motion.div
-            initial={{ opacity: 0, x: -60 }}
+            initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            style={{ display: 'flex', justifyContent: 'center' }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
           >
-            <div style={{ position: 'relative' }}>
-              {/* Avatar container */}
+            {/* Avatar card */}
+            <div style={{
+              borderRadius: '20px',
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid rgba(255,255,255,0.06)',
+              padding: '2rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '1.25rem',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              {/* Gradient corner */}
               <div style={{
-                width: 'clamp(200px, 35vw, 280px)',
-                height: 'clamp(200px, 35vw, 280px)',
-                borderRadius: '30px',
-                background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(236,72,153,0.15))',
-                border: '1px solid rgba(139,92,246,0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                overflow: 'hidden',
-              }}>
-                {/* SVG Avatar illustration */}
-                <svg viewBox="0 0 200 200" style={{ width: '80%', height: '80%' }} aria-label="Profile illustration">
-                  {/* Background circle */}
-                  <circle cx="100" cy="100" r="95" fill="rgba(139,92,246,0.1)" />
+                position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+                background: 'linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4)',
+              }} />
+
+              {/* SVG Avatar */}
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                style={{
+                  width: '140px', height: '140px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(236,72,153,0.15))',
+                  border: '2px solid rgba(139,92,246,0.25)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  overflow: 'hidden',
+                }}
+              >
+                <svg viewBox="0 0 160 160" width="120" height="120" aria-label="Profile avatar">
+                  <circle cx="80" cy="80" r="78" fill="rgba(139,92,246,0.08)" />
                   {/* Body */}
-                  <ellipse cx="100" cy="155" rx="45" ry="30" fill="rgba(124,58,237,0.6)" />
+                  <ellipse cx="80" cy="130" rx="38" ry="28" fill="rgba(124,58,237,0.7)" />
                   {/* Head */}
-                  <circle cx="100" cy="85" r="38" fill="#f1c27d" />
+                  <circle cx="80" cy="68" r="32" fill="#f1c27d" />
                   {/* Hair */}
-                  <ellipse cx="100" cy="57" rx="40" ry="18" fill="#2d1b69" />
-                  <rect x="60" y="57" width="10" height="35" rx="5" fill="#2d1b69" />
-                  <rect x="130" y="57" width="10" height="35" rx="5" fill="#2d1b69" />
+                  <ellipse cx="80" cy="44" rx="34" ry="16" fill="#1a0a3d" />
+                  <path d="M46 58 Q40 80 44 90" stroke="#1a0a3d" strokeWidth="8" fill="none" strokeLinecap="round" />
+                  <path d="M114 58 Q120 80 116 90" stroke="#1a0a3d" strokeWidth="8" fill="none" strokeLinecap="round" />
                   {/* Eyes */}
-                  <ellipse cx="88" cy="87" rx="5" ry="6" fill="#1a1a2e" />
-                  <ellipse cx="112" cy="87" rx="5" ry="6" fill="#1a1a2e" />
-                  <circle cx="90" cy="85" r="1.5" fill="#fff" />
-                  <circle cx="114" cy="85" r="1.5" fill="#fff" />
+                  <ellipse cx="70" cy="70" rx="4.5" ry="5" fill="#1a1a2e" />
+                  <ellipse cx="90" cy="70" rx="4.5" ry="5" fill="#1a1a2e" />
+                  <circle cx="71.5" cy="68.5" r="1.5" fill="#fff" />
+                  <circle cx="91.5" cy="68.5" r="1.5" fill="#fff" />
                   {/* Smile */}
-                  <path d="M 87 100 Q 100 112 113 100" stroke="#c9956c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                  <path d="M 70 82 Q 80 92 90 82" stroke="#c9956c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
                   {/* Laptop */}
-                  <rect x="60" y="145" width="80" height="50" rx="4" fill="#1e1e3f" />
-                  <rect x="62" y="147" width="76" height="43" rx="3" fill="#0d0d1f" />
-                  {/* Code on screen */}
-                  <rect x="67" y="153" width="30" height="3" rx="1.5" fill="#8b5cf6" />
-                  <rect x="67" y="159" width="45" height="3" rx="1.5" fill="#06b6d4" />
-                  <rect x="67" y="165" width="35" height="3" rx="1.5" fill="#ec4899" />
-                  <rect x="67" y="171" width="50" height="3" rx="1.5" fill="#8b5cf6" />
-                  <rect x="67" y="177" width="40" height="3" rx="1.5" fill="#22c55e" />
+                  <rect x="52" y="122" width="56" height="36" rx="4" fill="#0d0d1f" />
+                  <rect x="54" y="124" width="52" height="30" rx="2" fill="#030309" />
+                  <rect x="58" y="128" width="20" height="3" rx="1.5" fill="#8b5cf6" />
+                  <rect x="58" y="133" width="32" height="2" rx="1" fill="#06b6d4" />
+                  <rect x="58" y="137" width="25" height="2" rx="1" fill="#ec4899" />
+                  <rect x="58" y="141" width="36" height="2" rx="1" fill="#10b981" />
+                  <rect x="58" y="145" width="28" height="2" rx="1" fill="#8b5cf6" />
                 </svg>
+              </motion.div>
 
-                {/* Floating badge */}
-                <motion.div
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                  style={{
-                    position: 'absolute',
-                    top: '-15px',
-                    right: '-15px',
-                    background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
-                    borderRadius: '12px',
-                    padding: '0.5rem 0.75rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    color: '#fff',
-                    whiteSpace: 'nowrap',
-                    boxShadow: '0 4px 20px rgba(139,92,246,0.5)',
-                  }}
-                >
-                  B.Tech CSE 🎓
-                </motion.div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>
+                  Sai Manasa Nikhita Dasari
+                </div>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                  Aditya College of Engineering & Technology
+                </div>
+              </div>
 
-                <motion.div
-                  animate={{ y: [0, 8, 0] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                  style={{
-                    position: 'absolute',
-                    bottom: '-15px',
-                    left: '-15px',
-                    background: 'linear-gradient(135deg, #ec4899, #db2777)',
-                    borderRadius: '12px',
-                    padding: '0.5rem 0.75rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    color: '#fff',
-                    whiteSpace: 'nowrap',
-                    boxShadow: '0 4px 20px rgba(236,72,153,0.5)',
-                  }}
-                >
-                  CGPA 8.88 ⭐
-                </motion.div>
+              {/* Highlights */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
+                {HIGHLIGHTS.map(({ label, color, bg, border }) => (
+                  <motion.span
+                    key={label}
+                    whileHover={{ scale: 1.06, y: -2 }}
+                    style={{
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '2rem',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      color, background: bg, border: `1px solid ${border}`,
+                      cursor: 'default',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {label}
+                  </motion.span>
+                ))}
               </div>
             </div>
-          </motion.div>
 
-          {/* Text column */}
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.15 }}
-          >
-            <p style={{
-              color: 'var(--text-secondary)',
-              lineHeight: 1.9,
-              fontSize: '1rem',
-              marginBottom: '1.25rem',
-            }}>
-              I'm an aspiring <strong style={{ color: '#a78bfa' }}>Software Development Engineer</strong> pursuing
-              B.Tech in Computer Science at <strong style={{ color: '#fff' }}>Aditya College of Engineering and Technology</strong>,
-              maintaining a strong CGPA of 8.88.
-            </p>
-            <p style={{
-              color: 'var(--text-secondary)',
-              lineHeight: 1.9,
-              fontSize: '1rem',
-              marginBottom: '1.25rem',
-            }}>
-              I have strong foundations in <strong style={{ color: '#06b6d4' }}>Data Structures, Algorithms, OOP, DBMS, and Operating Systems</strong>.
-              My hands-on experience spans building scalable mobile applications using <strong style={{ color: '#f59e0b' }}>Flutter & Firebase</strong>,
-              backed by practical internship experience at Technical Hub Pvt. Ltd.
-            </p>
-            <p style={{
-              color: 'var(--text-secondary)',
-              lineHeight: 1.9,
-              fontSize: '1rem',
-              marginBottom: '2rem',
-            }}>
-              Currently deepening my expertise in <strong style={{ color: '#ec4899' }}>cloud architecture (AWS)</strong>,
-              AI-powered applications, and backend development with Node.js. I'm passionate about writing clean,
-              efficient, and maintainable code.
-            </p>
-
-            {/* Highlight chips */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2.5rem' }}>
-              {highlights.map(({ icon: Icon, label, color }) => (
+            {/* Stats grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+              {[
+                { value: '8.88', label: 'CGPA', color: '#8b5cf6' },
+                { value: '300+', label: 'LeetCode', color: '#FFA116' },
+                { value: '200+', label: 'GFG Problems', color: '#2F8D46' },
+                { value: '7', label: 'Certifications', color: '#06b6d4' },
+              ].map(({ value, label, color }) => (
                 <motion.div
                   key={label}
-                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileHover={{ scale: 1.04, borderColor: `${color}40` }}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '0.6rem',
-                    background: 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${color}30`,
-                    fontSize: '0.85rem',
-                    fontWeight: 500,
-                    color: color,
-                    cursor: 'default',
-                  }}
-                >
-                  <Icon style={{ fontSize: '0.9rem' }} />
-                  {label}
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Stats */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '1rem',
-            }}>
-              {stats.map(({ value, label }) => (
-                <div
-                  key={label}
-                  style={{
-                    padding: '1rem',
-                    borderRadius: '0.75rem',
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.07)',
+                    padding: '1.25rem',
+                    borderRadius: '12px',
+                    background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid rgba(255,255,255,0.06)',
                     textAlign: 'center',
+                    transition: 'all 0.2s',
+                    cursor: 'default',
                   }}
                 >
                   <div style={{
                     fontFamily: 'Outfit, sans-serif',
-                    fontWeight: 800,
-                    fontSize: '1.6rem',
-                    background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                    fontWeight: 900,
+                    fontSize: '1.8rem',
+                    background: `linear-gradient(135deg, ${color}, ${color}aa)`,
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
+                    lineHeight: 1.1,
                   }}>
                     {value}
                   </div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                  <div style={{ fontSize: '0.73rem', color: 'var(--text-secondary)', marginTop: '0.25rem', fontWeight: 500 }}>
                     {label}
                   </div>
-                </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Right — Bio + Timeline */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          >
+            {/* Bio */}
+            <div style={{ marginBottom: '2.5rem' }}>
+              <h3 style={{
+                fontFamily: 'Outfit, sans-serif',
+                fontWeight: 700,
+                fontSize: '1.25rem',
+                marginBottom: '1rem',
+                color: 'var(--text-primary)',
+              }}>
+                Who I Am
+              </h3>
+              {[
+                `I'm an aspiring Software Development Engineer with a passion for building products that make a difference. My journey started with C programming and evolved into building full-stack mobile apps with Flutter and Firebase.`,
+                `I thrive at the intersection of clean engineering and creative problem solving. During my internship at Technical Hub Pvt. Ltd., I built 3 production-level apps used by 100+ real users, integrating Firebase Auth, Firestore, and real-time APIs.`,
+                `Outside of building apps, I invest heavily in competitive programming — solving 300+ problems on LeetCode, achieving a 5★ rating in SQL on HackerRank, and holding industry certifications from Red Hat, MongoDB, and Cisco.`,
+              ].map((para, i) => (
+                <p key={i} style={{
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.85,
+                  fontSize: '0.93rem',
+                  marginBottom: i < 2 ? '1rem' : 0,
+                }}>
+                  {para}
+                </p>
+              ))}
+            </div>
+
+            {/* Timeline */}
+            <div>
+              <h3 style={{
+                fontFamily: 'Outfit, sans-serif',
+                fontWeight: 700,
+                fontSize: '1.1rem',
+                marginBottom: '1.5rem',
+                color: 'var(--text-primary)',
+              }}>
+                My Journey
+              </h3>
+              {TIMELINE.map((item, i) => (
+                <TimelineItem key={i} item={item} index={i} inView={inView} />
               ))}
             </div>
           </motion.div>

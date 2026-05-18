@@ -1,218 +1,213 @@
 import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa'
-import {
-  SiFlutter, SiFirebase, SiMongodb, SiNodedotjs, SiDart
-} from 'react-icons/si'
+import { SiFlutter, SiFirebase, SiMongodb, SiNodedotjs, SiDart } from 'react-icons/si'
 
-const projects = [
+const PROJECTS = [
   {
     id: 'qlue',
     title: 'QLUE',
     subtitle: 'AI Powered Resume Interview App',
-    description:
-      'An AI-powered interview prep app that generates 10–15 personalized mock questions per resume. Implements smart question generation using Gemini AI and deploys scalable backend services on AWS Cloud to handle concurrent interview sessions efficiently.',
+    description: 'An AI-powered interview prep platform that generates 10–15 personalized mock questions per resume, enabling smarter interview preparation with Google Gemini AI and scalable AWS backend.',
+    longDesc: 'Built to solve the problem of generic interview prep, QLUE analyzes uploaded resumes and generates highly personalized questions using Gemini AI. The backend handles concurrent sessions efficiently on AWS Cloud with Firebase as the real-time database.',
     tags: ['Flutter', 'Firebase', 'AWS Cloud', 'Gemini AI', 'Dart'],
-    tagIcons: { Flutter: SiFlutter, Firebase: SiFirebase, Dart: SiDart },
     github: 'https://github.com/nikhitadasari26/Qlue',
     gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
     accentColor: '#8b5cf6',
     emoji: '🤖',
-    highlights: [
-      '10–15 personalized questions per resume',
-      'Gemini AI integration',
-      'AWS Cloud scalable backend',
-    ],
+    metrics: ['10–15 personalized Q&A', 'Gemini AI powered', 'AWS scalable backend'],
+    featured: true,
   },
   {
     id: 'creatoros',
     title: 'CREATOROS',
     subtitle: 'AI Powered Creator Operating System',
-    description:
-      'An all-in-one platform for content creators integrating video editing, analytics, publishing, AI scripting, and media management. Features intelligent tools including AI script generation, auto captions, thumbnail analysis, trend discovery, and personalized recommendations.',
+    description: 'An all-in-one platform for content creators with AI script generation, auto captions, thumbnail analysis, trend discovery, real-time analytics, and multi-platform publishing.',
+    longDesc: 'CREATOROS unifies the creator workflow — from ideation to publishing. AI tools handle script writing, caption generation, and thumbnail analysis while the backend powers real-time analytics and cloud-based media processing via FFmpeg.',
     tags: ['Flutter', 'Firebase', 'MongoDB', 'AWS', 'OpenAI', 'FFmpeg', 'Node.js'],
-    tagIcons: { Flutter: SiFlutter, Firebase: SiFirebase, MongoDB: SiMongodb, 'Node.js': SiNodedotjs },
     github: 'https://github.com/Dhanushkotichukka/creatoros_app',
     gradient: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
     accentColor: '#ec4899',
     emoji: '🎬',
-    highlights: [
-      'Multi-platform content publishing',
-      'Real-time analytics dashboard',
-      'AI-powered script generation',
-    ],
+    metrics: ['AI script generation', 'Multi-platform publish', 'Real-time analytics'],
+    featured: true,
   },
   {
     id: 'planzo',
     title: 'PLANZO',
     subtitle: 'Task Management & Reminder App',
-    description:
-      'A feature-rich task management app with categories, priorities, and scheduled reminders. Integrates Firebase Authentication and Firestore to manage 100+ user tasks with real-time updates, push notifications, and seamless cross-device sync.',
-    tags: ['Flutter', 'Dart', 'Firebase Auth', 'Firestore', 'Notifications'],
-    tagIcons: { Flutter: SiFlutter, Dart: SiDart, Firebase: SiFirebase },
+    description: 'A productivity-first task management app with categories, priorities, scheduled smart reminders, and real-time Firebase sync across devices for 100+ users.',
+    longDesc: 'Planzo helps users stay on top of their work with intelligent task categorization, priority queues, and push notifications. Firebase Auth and Firestore power instant sync and real-time updates across all devices.',
+    tags: ['Flutter', 'Dart', 'Firebase Auth', 'Firestore', 'Push Notifications'],
     github: 'https://github.com/nikhitadasari26/Planzo',
     gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
     accentColor: '#06b6d4',
     emoji: '📋',
-    highlights: [
-      'Real-time sync across devices',
-      '100+ user task management',
-      'Smart push notifications',
-    ],
+    metrics: ['100+ users', 'Real-time sync', 'Smart notifications'],
+    featured: false,
   },
 ]
 
 function ProjectCard({ project, index }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const [expanded, setExpanded] = useState(false)
 
   return (
     <motion.article
       ref={ref}
       id={`project-${project.id}`}
-      initial={{ opacity: 0, y: 60 }}
+      initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.15, ease: 'easeOut' }}
-      whileHover={{ y: -8 }}
+      transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
       style={{
-        borderRadius: '1.25rem',
+        borderRadius: '20px',
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid rgba(255,255,255,0.06)',
         overflow: 'hidden',
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.08)',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        transition: 'border-color 0.3s, box-shadow 0.3s',
+        transition: 'transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
       }}
-      onHoverStart={(e) => {
-        if (e.target && e.target.style) {
-          e.target.style.borderColor = `${project.accentColor}40`
-          e.target.style.boxShadow = `0 20px 60px ${project.accentColor}20`
-        }
+      whileHover={{
+        y: -8,
+        borderColor: `${project.accentColor}30`,
+        boxShadow: `0 24px 70px ${project.accentColor}15`,
       }}
     >
-      {/* Gradient top strip */}
-      <div style={{
-        height: '4px',
-        background: project.gradient,
-      }} />
+      {/* Top gradient bar */}
+      <div style={{ height: '3px', background: project.gradient, flexShrink: 0 }} />
 
-      {/* Glowing top banner */}
+      {/* Header */}
       <div style={{
-        padding: '2rem 2rem 1.5rem',
-        background: `linear-gradient(180deg, ${project.accentColor}08 0%, transparent 100%)`,
+        padding: '1.75rem 1.75rem 0',
+        background: `linear-gradient(180deg, ${project.accentColor}06 0%, transparent 100%)`,
       }}>
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-          <div>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              marginBottom: '0.25rem',
+              width: '48px', height: '48px',
+              borderRadius: '12px',
+              background: `${project.accentColor}15`,
+              border: `1px solid ${project.accentColor}25`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '1.5rem',
+              flexShrink: 0,
             }}>
-              <span style={{ fontSize: '1.75rem' }}>{project.emoji}</span>
-              <div>
-                <h3 style={{
-                  fontFamily: 'Outfit, sans-serif',
-                  fontWeight: 800,
-                  fontSize: '1.3rem',
-                  color: '#f1f5f9',
-                  lineHeight: 1.1,
-                }}>
-                  {project.title}
-                </h3>
-                <p style={{
-                  fontSize: '0.8rem',
-                  color: project.accentColor,
-                  fontWeight: 600,
-                  letterSpacing: '0.03em',
-                  marginTop: '0.15rem',
-                }}>
-                  {project.subtitle}
-                </p>
-              </div>
+              {project.emoji}
+            </div>
+            <div>
+              <h3 style={{
+                fontFamily: 'Outfit, sans-serif',
+                fontWeight: 800,
+                fontSize: '1.15rem',
+                color: 'var(--text-primary)',
+                lineHeight: 1.1,
+              }}>
+                {project.title}
+              </h3>
+              <p style={{ fontSize: '0.75rem', color: project.accentColor, fontWeight: 600, marginTop: '0.15rem' }}>
+                {project.subtitle}
+              </p>
             </div>
           </div>
 
-          {/* GitHub link */}
-          <motion.a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`View ${project.title} on GitHub`}
-            id={`github-${project.id}`}
-            whileHover={{ scale: 1.15, rotate: 5 }}
-            whileTap={{ scale: 0.9 }}
-            style={{
-              width: '42px',
-              height: '42px',
-              borderRadius: '0.6rem',
-              background: `${project.accentColor}15`,
-              border: `1px solid ${project.accentColor}30`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: project.accentColor,
-              textDecoration: 'none',
-              fontSize: '1.1rem',
+          {project.featured && (
+            <span style={{
+              padding: '0.2rem 0.6rem',
+              borderRadius: '2rem',
+              background: 'rgba(245,158,11,0.1)',
+              border: '1px solid rgba(245,158,11,0.25)',
+              fontSize: '0.65rem',
+              fontWeight: 700,
+              color: '#f59e0b',
+              whiteSpace: 'nowrap',
               flexShrink: 0,
-            }}
-          >
-            <FaGithub />
-          </motion.a>
+            }}>
+              ⭐ Featured
+            </span>
+          )}
         </div>
+      </div>
 
-        {/* Description */}
+      {/* Body */}
+      <div style={{ padding: '1.25rem 1.75rem', flex: 1 }}>
         <p style={{
           color: 'var(--text-secondary)',
-          fontSize: '0.9rem',
+          fontSize: '0.88rem',
           lineHeight: 1.8,
-          marginBottom: '1.5rem',
+          marginBottom: '1rem',
         }}>
           {project.description}
         </p>
 
-        {/* Highlights */}
-        <ul style={{
-          listStyle: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0.4rem',
-          marginBottom: '1.5rem',
-        }}>
-          {project.highlights.map((h) => (
-            <li key={h} style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontSize: '0.82rem',
-              color: '#cbd5e1',
+        {/* Expanded description */}
+        <motion.div
+          animate={{ height: expanded ? 'auto' : 0, opacity: expanded ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+          style={{ overflow: 'hidden' }}
+        >
+          <p style={{
+            color: 'var(--text-secondary)',
+            fontSize: '0.83rem',
+            lineHeight: 1.8,
+            marginBottom: '1rem',
+            fontStyle: 'italic',
+            borderLeft: `2px solid ${project.accentColor}40`,
+            paddingLeft: '0.85rem',
+          }}>
+            {project.longDesc}
+          </p>
+        </motion.div>
+
+        {/* Read more toggle */}
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          style={{
+            background: 'none', border: 'none',
+            cursor: 'pointer',
+            fontSize: '0.78rem',
+            fontWeight: 600,
+            color: project.accentColor,
+            marginBottom: '1.25rem',
+            padding: 0,
+            letterSpacing: '0.02em',
+          }}
+        >
+          {expanded ? '↑ Show less' : '↓ Read more'}
+        </button>
+
+        {/* Metrics */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1.25rem' }}>
+          {project.metrics.map((m) => (
+            <div key={m} style={{
+              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              fontSize: '0.8rem', color: '#cbd5e1',
             }}>
               <span style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
+                width: '5px', height: '5px', borderRadius: '50%',
                 background: project.accentColor,
+                boxShadow: `0 0 5px ${project.accentColor}`,
                 flexShrink: 0,
               }} />
-              {h}
-            </li>
+              {m}
+            </div>
           ))}
-        </ul>
+        </div>
 
         {/* Tech tags */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
           {project.tags.map((tag) => (
             <span key={tag} style={{
-              padding: '0.25rem 0.7rem',
+              padding: '0.22rem 0.65rem',
               borderRadius: '2rem',
-              background: `${project.accentColor}12`,
-              border: `1px solid ${project.accentColor}25`,
-              fontSize: '0.72rem',
+              background: `${project.accentColor}10`,
+              border: `1px solid ${project.accentColor}20`,
+              fontSize: '0.7rem',
               fontWeight: 600,
               color: project.accentColor,
-              letterSpacing: '0.02em',
+              fontFamily: 'JetBrains Mono, monospace',
             }}>
               {tag}
             </span>
@@ -220,10 +215,9 @@ function ProjectCard({ project, index }) {
         </div>
       </div>
 
-      {/* Footer CTA */}
+      {/* Footer */}
       <div style={{
-        marginTop: 'auto',
-        padding: '1.25rem 2rem',
+        padding: '1rem 1.75rem',
         borderTop: '1px solid rgba(255,255,255,0.05)',
         display: 'flex',
         gap: '0.75rem',
@@ -232,26 +226,26 @@ function ProjectCard({ project, index }) {
           href={project.github}
           target="_blank"
           rel="noopener noreferrer"
-          id={`view-repo-${project.id}`}
-          whileHover={{ scale: 1.04 }}
+          id={`github-${project.id}`}
+          aria-label={`View ${project.title} on GitHub`}
+          whileHover={{ scale: 1.04, boxShadow: `0 8px 24px ${project.accentColor}35` }}
           whileTap={{ scale: 0.97 }}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
+            display: 'flex', alignItems: 'center', gap: '0.5rem',
             padding: '0.6rem 1.25rem',
-            borderRadius: '0.5rem',
+            borderRadius: '8px',
             background: project.gradient,
             color: '#fff',
             textDecoration: 'none',
             fontSize: '0.82rem',
             fontWeight: 700,
-            letterSpacing: '0.03em',
             fontFamily: 'Outfit, sans-serif',
+            flex: 1,
+            justifyContent: 'center',
           }}
         >
           <FaGithub />
-          View Repository
+          View Code
         </motion.a>
       </div>
     </motion.article>
@@ -263,103 +257,91 @@ export default function Projects() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section
-      id="projects"
-      style={{
-        padding: 'clamp(4rem, 10vw, 7rem) 1.5rem',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Background glow */}
+    <section id="projects" style={{
+      padding: 'clamp(5rem, 10vw, 8rem) 1.5rem',
+      position: 'relative', overflow: 'hidden',
+    }}>
       <div style={{
-        position: 'absolute',
-        top: '30%',
-        left: '-200px',
-        width: '500px',
-        height: '500px',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(236,72,153,0.06) 0%, transparent 70%)',
+        position: 'absolute', top: '40%', left: '-200px',
+        width: '500px', height: '500px', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(236,72,153,0.05) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        {/* Section header */}
+        {/* Header */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           style={{ textAlign: 'center', marginBottom: '4rem' }}
         >
-          <span style={{
-            fontSize: '0.8rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.2em',
-            color: '#8b5cf6',
-            fontWeight: 600,
-          }}>
-            What I've Built
-          </span>
-          <h2 className="section-heading" style={{ marginTop: '0.5rem' }}>
+          <div className="section-label">🚀 Portfolio</div>
+          <h2 className="section-title">
             Featured{' '}
-            <span style={{
-              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>
-              Projects
-            </span>
+            <span className="gradient-text-2">Projects</span>
           </h2>
-          <p className="section-subheading" style={{ margin: '0.75rem auto 0', textAlign: 'center' }}>
-            Real-world applications built with cutting-edge technology
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.75rem', fontSize: '0.95rem' }}>
+            Real applications built and shipped to production
           </p>
         </motion.div>
 
-        {/* Project cards grid */}
+        {/* Cards grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '1.5rem',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          gap: '1.25rem',
+          marginBottom: '2.5rem',
         }}>
-          {projects.map((project, i) => (
+          {PROJECTS.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}
         </div>
 
-        {/* Internship callout */}
+        {/* Internship */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.6 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
           style={{
-            marginTop: '3rem',
             padding: '1.75rem 2rem',
-            borderRadius: '1rem',
-            background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(236,72,153,0.06))',
-            border: '1px solid rgba(139,92,246,0.2)',
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '1rem',
-            flexWrap: 'wrap',
+            borderRadius: '16px',
+            background: 'linear-gradient(135deg, rgba(139,92,246,0.06), rgba(236,72,153,0.04))',
+            border: '1px solid rgba(139,92,246,0.15)',
+            display: 'grid',
+            gridTemplateColumns: 'auto 1fr',
+            gap: '1.25rem',
+            alignItems: 'start',
           }}
         >
-          <span style={{ fontSize: '2rem', flexShrink: 0 }}>💼</span>
+          <div style={{
+            width: '52px', height: '52px',
+            borderRadius: '12px',
+            background: 'rgba(139,92,246,0.12)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '1.5rem',
+            flexShrink: 0,
+          }}>
+            💼
+          </div>
           <div>
-            <h3 style={{
+            <div style={{
               fontFamily: 'Outfit, sans-serif',
               fontWeight: 700,
-              fontSize: '1.05rem',
-              color: '#f1f5f9',
-              marginBottom: '0.4rem',
+              fontSize: '1rem',
+              color: 'var(--text-primary)',
+              marginBottom: '0.25rem',
             }}>
-              Flutter Full Stack Developer Intern — Technical Hub Pvt. Ltd.
-            </h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.7 }}>
-              May 2025 – June 2025 · Built 3 multi-screen mobile apps with Flutter & Dart,
-              integrated 5+ backend APIs with Firebase Auth and Firestore enabling real-time event booking
-              for 100+ users. Collaborated in a team of 4 to deliver reusable widgets and optimize app performance.
+              Flutter Full Stack Developer Intern
+            </div>
+            <div style={{ fontSize: '0.82rem', color: '#a78bfa', marginBottom: '0.5rem', fontWeight: 500 }}>
+              Technical Hub Pvt. Ltd. · May 2025 – June 2025
+            </div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.7 }}>
+              Built 3 multi-screen mobile apps with Flutter & Dart · Integrated 5+ backend APIs with
+              Firebase Auth and Firestore · Enabled real-time event booking for 100+ users ·
+              Collaborated in a team of 4, delivering reusable widgets and optimizing app performance.
             </p>
           </div>
         </motion.div>
