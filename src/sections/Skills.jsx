@@ -298,6 +298,7 @@ export default function Skills() {
               { name: 'Operating Systems Basics', issuer: 'Cisco Netacad', color: '#1BA0D7', href: 'https://www.credly.com/badges/5fa28183-e3cf-4e77-8278-bd96a49a7747/public_url' },
               { name: 'IT Specialist HTML & CSS', issuer: 'Certiport', color: '#E34F26', href: 'https://www.credly.com/badges/78f2a939-1d52-438d-a503-c2565ba10097/public_url' },
               { name: 'SQL', issuer: 'HackerRank', color: '#4479A1', href: 'https://www.hackerrank.com/certificates/fd66a985d124' },
+              { name: 'GitHub Foundations', issuer: 'Microsoft', color: '#0078d4', href: 'https://learn.microsoft.com/api/credentials/share/en-in/NikhitaDasari-1339/3363AB4061BDF7B7?sharingId=41F7046E6EF3AFE9' },
             ].map(({ name, issuer, color, href }) => (
               <motion.a
                 key={name}
