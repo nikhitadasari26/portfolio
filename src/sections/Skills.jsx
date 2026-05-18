@@ -226,7 +226,7 @@ export default function Skills() {
     <section id="skills" ref={ref} style={{
       padding: 'clamp(5rem, 10vw, 8rem) 1.5rem',
       position: 'relative',
-      background: 'linear-gradient(180deg, var(--bg-primary) 0%, rgba(8,8,24,0.5) 50%, var(--bg-primary) 100%)',
+      background: 'linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-section-stripe) 50%, var(--bg-primary) 100%)',
     }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         {/* Header */}
