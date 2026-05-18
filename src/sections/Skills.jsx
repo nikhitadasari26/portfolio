@@ -191,13 +191,7 @@ function SkillGroup({ group, index, inView }) {
             {group.category}
           </span>
         </div>
-        <span style={{
-          fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.72rem',
-          color: 'var(--text-muted)',
-        }}>
-          {group.proficiency}%
-        </span>
+
       </div>
 
       {/* Progress bar — ON-SCROLL ANIMATION: skill fill */}
