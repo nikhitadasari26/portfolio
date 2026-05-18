@@ -6,13 +6,14 @@
 @import "tailwindcss";
 
 /* ============================================================
-   DESIGN TOKENS
+   DARK MODE TOKENS (default)
    ============================================================ */
 :root {
   --bg-primary: #030309;
   --bg-secondary: #080818;
   --bg-card: rgba(255, 255, 255, 0.03);
   --bg-card-hover: rgba(255, 255, 255, 0.06);
+  --bg-card-solid: #0d0d1f;
   --purple: #8b5cf6;
   --purple-light: #a78bfa;
   --purple-dark: #7c3aed;
@@ -24,13 +25,50 @@
   --text-secondary: #64748b;
   --text-muted: #475569;
   --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
   --border-accent: rgba(139, 92, 246, 0.3);
   --shadow-purple: 0 20px 60px rgba(139, 92, 246, 0.15);
-  --shadow-pink: 0 20px 60px rgba(236, 72, 153, 0.15);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --grid-color: rgba(139, 92, 246, 0.03);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --navbar-bg: rgba(3, 3, 9, 0.85);
+  --input-bg: rgba(255, 255, 255, 0.03);
+  --input-border: rgba(255, 255, 255, 0.08);
+  --input-focus: rgba(139, 92, 246, 0.5);
+  --orb-1: rgba(139, 92, 246, 0.22);
+  --orb-2: rgba(236, 72, 153, 0.15);
+  --orb-3: rgba(6, 182, 212, 0.12);
+  --vignette: rgba(3, 3, 9, 0.8);
+  --transition-theme: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ============================================================
+   LIGHT MODE TOKENS
+   ============================================================ */
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: rgba(0, 0, 0, 0.025);
+  --bg-card-hover: rgba(0, 0, 0, 0.05);
+  --bg-card-solid: #fff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
+  --border-accent: rgba(139, 92, 246, 0.35);
+  --shadow-purple: 0 20px 60px rgba(139, 92, 246, 0.12);
+  --grid-color: rgba(139, 92, 246, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --navbar-bg: rgba(248, 250, 252, 0.88);
+  --input-bg: rgba(0, 0, 0, 0.03);
+  --input-border: rgba(0, 0, 0, 0.12);
+  --input-focus: rgba(139, 92, 246, 0.5);
+  --orb-1: rgba(139, 92, 246, 0.12);
+  --orb-2: rgba(236, 72, 153, 0.08);
+  --orb-3: rgba(6, 182, 212, 0.07);
+  --vignette: rgba(248, 250, 252, 0.6);
 }
 
 /* ============================================================
@@ -44,6 +82,11 @@ html {
   font-size: 16px;
 }
 
+/* Smooth theme transitions on root elements */
+html, body, #root {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   background: var(--bg-primary);
@@ -52,11 +95,14 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Outfit', sans-serif;
   line-height: 1.2;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 code, pre, .mono {
@@ -99,10 +145,11 @@ code, pre, .mono {
 }
 
 .glass {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .glass-hover:hover {
@@ -124,6 +171,12 @@ code, pre, .mono {
   padding: 0.35rem 0.9rem;
   border-radius: 2rem;
   margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .section-label {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.25);
 }
 
 .section-title {
@@ -131,6 +184,8 @@ code, pre, .mono {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
   letter-spacing: -0.02em;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 /* ============================================================
@@ -138,9 +193,10 @@ code, pre, .mono {
    ============================================================ */
 .grid-bg {
   background-image:
-    linear-gradient(rgba(139,92,246,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139,92,246,0.03) 1px, transparent 1px);
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
   background-size: 64px 64px;
+  transition: background 0.3s ease;
 }
 
 /* ============================================================
@@ -152,6 +208,51 @@ code, pre, .mono {
   filter: blur(100px);
   pointer-events: none;
   will-change: transform;
+  transition: background 0.5s ease;
+}
+
+/* ============================================================
+   SECTION BACKGROUNDS
+   ============================================================ */
+section {
+  transition: background-color 0.3s ease;
+}
+
+/* ============================================================
+   CARD / GLASS ELEMENTS
+   ============================================================ */
+[data-theme="light"] .card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================================
+   NAVBAR LIGHT OVERRIDES
+   ============================================================ */
+[data-theme="light"] header {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================================
+   INPUT OVERRIDES
+   ============================================================ */
+input, textarea {
+  background: var(--input-bg) !important;
+  border-color: var(--input-border) !important;
+  color: var(--text-primary) !important;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* ============================================================
+   THEME TOGGLE BUTTON
+   ============================================================ */
+#theme-toggle-btn {
+  transition: all 0.3s ease;
 }
 
 /* ============================================================

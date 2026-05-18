@@ -79,25 +79,26 @@ export default function Hero() {
       {/* Parallax orbs — PARALLAX EFFECT */}
       <Blob speed={-18} style={{
         width: '700px', height: '700px',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.22) 0%, transparent 65%)',
+        background: `radial-gradient(circle, var(--orb-1) 0%, transparent 65%)`,
         top: '-200px', left: '-200px',
       }} />
       <Blob speed={12} style={{
         width: '600px', height: '600px',
-        background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, transparent 65%)',
+        background: `radial-gradient(circle, var(--orb-2) 0%, transparent 65%)`,
         bottom: '-150px', right: '-150px',
       }} />
       <Blob speed={-8} style={{
         width: '400px', height: '400px',
-        background: 'radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 65%)',
+        background: `radial-gradient(circle, var(--orb-3) 0%, transparent 65%)`,
         top: '35%', left: '55%',
       }} />
 
-      {/* Noise vignette */}
+      {/* Vignette */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(3,3,9,0.8) 100%)',
+        background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, var(--vignette) 100%)',
         pointerEvents: 'none',
+        transition: 'background 0.3s ease',
       }} />
 
       {/* Content */}
